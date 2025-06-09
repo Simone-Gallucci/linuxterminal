@@ -3,10 +3,10 @@ new Vue({
   data: {
     input: '',
     output: ['Benvenuto nel Simulatore Terminale Linux. Digita "help" per iniziare.'],
-    fs: { '/': ['home'], '/home': ['user'], '/home/user': [] },
-    fileContent: {},
+    fs: JSON.parse(localStorage.getItem('fs')) || { '/': ['home'], '/home': ['user'], '/home/user': [] },
+    fileContent: JSON.parse(localStorage.getItem('fileContent')) || {},
     currentPath: '/home/user',
-    logs: [],
+    logs: JSON.parse(localStorage.getItem('logs')) || [],
     nanoMode: false,
     nanoFile: '',
     nanoContent: '',
@@ -18,6 +18,11 @@ new Vue({
     }
   },
   methods: {
+    saveToLocalStorage() {
+      localStorage.setItem('fs', JSON.stringify(this.fs));
+      localStorage.setItem('fileContent', JSON.stringify(this.fileContent));
+      localStorage.setItem('logs', JSON.stringify(this.logs));
+    },
     resolve(path) {
       if (!path || path === '.') return this.currentPath;
       if (path === '..') return this.currentPath.split('/').slice(0, -1).join('/') || '/';
@@ -132,6 +137,7 @@ new Vue({
         default:
           this.output.push(`${cmd}: comando non trovato`);
       }
+      this.saveToLocalStorage();
       this.input = '';
     },
     handleNanoExit() {
@@ -148,6 +154,7 @@ new Vue({
               this.output.push('Modifiche annullate.');
             }
             this.nanoMode = false;
+            this.saveToLocalStorage();
             e.target.removeEventListener('keyup', handleConfirm);
           }
         };
