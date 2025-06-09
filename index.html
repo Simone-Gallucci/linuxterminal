@@ -9,7 +9,9 @@
     body { background: #000; color: #0f0; font-family: monospace; padding: 1em; }
     #app { max-width: 1000px; margin: auto; }
     .output { white-space: pre-wrap; }
-    input { width: 100%; background: #000; color: #0f0; border: none; outline: none; font-family: monospace; }
+    .prompt-line { display: flex; align-items: center; }
+    .prompt-line span { flex-shrink: 0; }
+    .prompt-line input { flex-grow: 1; background: #000; color: #0f0; border: none; outline: none; font-family: monospace; }
     .editor { background: #111; padding: 1em; margin-top: 1em; }
   </style>
 </head>
@@ -18,7 +20,7 @@
   <div class="output">
     <div v-for="line in output">{{ line }}</div>
   </div>
-  <div v-if="!nanoMode">
+  <div v-if="!nanoMode" class="prompt-line">
     <span>{{ prompt }}</span><input v-model="input" @keyup.enter="handleCommand" autofocus>
   </div>
   <div v-else class="editor">
